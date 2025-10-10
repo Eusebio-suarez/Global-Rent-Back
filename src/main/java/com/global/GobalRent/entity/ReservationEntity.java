@@ -1,8 +1,7 @@
 package com.global.GobalRent.entity;
 
-import com.global.GobalRent.enums.RolEnum;
+import java.time.LocalDate;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -17,18 +16,16 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserEntity {
-
+public class ReservationEntity {
+    
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long id;
 
-    private String name;
+    private Long totalPrice;
 
-    @Column(unique=true)
-    private String email;
+    private LocalDate startDate;
 
-    private String password;
+    private LocalDate endDate;
 
-    private RolEnum rol;
 }
