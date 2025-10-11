@@ -16,10 +16,10 @@ import io.jsonwebtoken.security.Keys;
 @Component
 public class jwtUtils {
 
-    @Value("${secretKey}")
+    @Value("${jwt.secretKey}")
     private String secretKey;
 
-    @Value("${expiration}")
+    @Value("${jwt.expiration}")
     private String expiration;
 
 
