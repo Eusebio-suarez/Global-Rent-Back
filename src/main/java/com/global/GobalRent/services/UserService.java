@@ -3,10 +3,12 @@ package com.global.GobalRent.services;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import com.global.GobalRent.dto.UserResponseDTO;
 import com.global.GobalRent.entity.UserEntity;
+import com.global.GobalRent.exceptions.ExceptionImpl;
 import com.global.GobalRent.repository.UserRepository;
 
 @Service
@@ -21,7 +23,7 @@ public class UserService {
 
         if(userEntitys.isEmpty()){
 
-            throw new RuntimeException("no se encontraron usuarios");
+            throw new ExceptionImpl("no se encontraron usuarios.",HttpStatus.NOT_FOUND);
         }
 
         return userEntitys.stream()
