@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.global.GobalRent.dto.UserResponseDTO;
+import com.global.GobalRent.dto.response.UserResponseDTO;
 import com.global.GobalRent.services.UserService;
 
 
