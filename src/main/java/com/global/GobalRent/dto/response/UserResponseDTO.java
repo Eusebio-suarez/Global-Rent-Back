@@ -1,4 +1,4 @@
-package com.global.GobalRent.dto;
+package com.global.GobalRent.dto.response;
 
 import lombok.Builder;
 import lombok.Data;
