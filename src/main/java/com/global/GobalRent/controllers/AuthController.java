@@ -18,7 +18,6 @@ import com.global.GobalRent.entity.UserEntity;
 import com.global.GobalRent.exceptions.ExceptionImpl;
 import com.global.GobalRent.services.UserService;
 import com.global.GobalRent.utils.ApiResponse;
-import com.global.GobalRent.utils.jwtUtils;
 
 import jakarta.validation.Valid;
 
@@ -50,7 +49,7 @@ public class AuthController {
                 .success(true)
                 .message("inicio de sesión correcto")
                 .data(LoginResponseDTO.builder()
-                    .token(token)    
+                    .token(token)
                     .build()
                 )
                 .build()
