@@ -34,7 +34,7 @@ public class CarEntity {
     
     private Long bags;
 
-    private Long price;
+    private Double price;
 
     private boolean status;
 
