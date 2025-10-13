@@ -9,5 +9,6 @@ import com.global.GobalRent.entity.UserEntity;
 
 @Repository
 public interface  UserRepository extends JpaRepository<UserEntity, Long> {
+    
     public Optional<UserEntity> findByEmail(String email);
 }

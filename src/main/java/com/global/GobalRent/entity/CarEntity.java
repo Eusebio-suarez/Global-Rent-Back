@@ -36,6 +36,8 @@ public class CarEntity {
 
     private Long price;
 
+    private boolean status;
+
     @OneToMany(mappedBy = "car")
     private List<ReservationEntity> reservations;
 

@@ -15,7 +15,6 @@ import com.global.GobalRent.security.filters.JwtAuthorizationFilter;
 @Configuration
 public class SecurityConfig {
 
-
     @Autowired
     private JwtAuthorizationFilter jwtAuthorizationFilter;
     
