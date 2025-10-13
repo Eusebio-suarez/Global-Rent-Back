@@ -44,7 +44,7 @@ public class CarService {
     public CarCreatedDTO registerCar(CarRequestDTO carRequestDTO){
 
         if(carRepository.existsById(carRequestDTO.getLicensePlate())){
-            throw
+            throw new ExceptionImpl("El carro ya existe.",HttpStatus.CONFLICT);
         }
 
         CarEntity carEntity = CarEntity.builder()
