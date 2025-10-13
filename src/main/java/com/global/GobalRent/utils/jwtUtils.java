@@ -11,10 +11,11 @@ import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+import jakarta.servlet.http.HttpServletRequest;
 
 
 @Component
-public class jwtUtils {
+public class JwtUtils {
 
     @Value("${jwt.secretKey}")
     private String secretKey;
@@ -69,4 +70,21 @@ public class jwtUtils {
             .getBody()
             .getSubject();
     }
+
+    //obtener el subject con la request
+    public String getSubjectByRequest(HttpServletRequest request){
+
+        String authorization = request.getHeader("Authorization");
+
+        String token = authorization.substring(7);
+
+        return Jwts.parserBuilder()
+            .setSigningKey(getSignatureKey())
+            .build()
+            .parseClaimsJws(token)
+            .getBody()
+            .getSubject();
+        
+    }
+
 }
