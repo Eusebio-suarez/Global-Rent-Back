@@ -49,13 +49,6 @@ public class ReservationService {
 
         UserEntity user = userOptional.get();
 
-        List<ReservationEntity> reserves = reservationRepository.findByStartDateLessThanEqualAndEndDateGreaterThanEqual(reservationRequestDTO.getEndDate(),reservationRequestDTO.getStartDate());
-        
-        //verificar que la reserva no se cruze con las ya existentes
-        if(!reserves.isEmpty()){
-            
-            throw new ExceptionImpl("la reserva se cruza con otras.",HttpStatus.CONFLICT);
-        }
 
         Optional<CarEntity> carOptional = carRepository.findById(reservationRequestDTO.getLicensePlate());
     
@@ -65,6 +58,15 @@ public class ReservationService {
         }
 
         CarEntity car = carOptional.get();
+
+
+        List<ReservationEntity> reserves = reservationRepository.findByCar_licensePlateAndStartDateLessThanEqualAndEndDateGreaterThanEqual(car.getLicensePlate(),reservationRequestDTO.getEndDate(),reservationRequestDTO.getStartDate());
+        
+        //verificar que la reserva no se cruze con las ya existentes
+        if(!reserves.isEmpty()){
+            
+            throw new ExceptionImpl("la reserva se cruza con otras.",HttpStatus.CONFLICT);
+        }
 
         Double price = car.getPrice();
 
