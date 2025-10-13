@@ -18,6 +18,7 @@ import com.global.GobalRent.entity.UserEntity;
 import com.global.GobalRent.exceptions.ExceptionImpl;
 import com.global.GobalRent.services.UserService;
 import com.global.GobalRent.utils.ApiResponse;
+import com.global.GobalRent.utils.JwtUtils;
 
 import jakarta.validation.Valid;
 
@@ -29,7 +30,7 @@ public class AuthController {
     private UserService userService;
 
     @Autowired
-    private com.global.GobalRent.utils.jwtUtils jwtUtils;
+    private JwtUtils jwtUtils;
 
     @PostMapping("/login")
     public ResponseEntity<ApiResponse<LoginResponseDTO>>loggin(@Valid @RequestBody LoginRequestDTO loginRequestDTO){

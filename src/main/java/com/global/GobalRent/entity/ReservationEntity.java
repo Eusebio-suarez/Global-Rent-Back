@@ -26,7 +26,7 @@ public class ReservationEntity {
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long id;
 
-    private Long totalPrice;
+    private Double totalPrice;
 
     //relacion con la entidad user
     @ManyToOne
