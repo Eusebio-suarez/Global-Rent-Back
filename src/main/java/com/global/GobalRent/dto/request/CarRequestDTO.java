@@ -32,6 +32,6 @@ public class CarRequestDTO {
 
     @NotNull
     @Positive
-    private Long price;
+    private Double price;
 
 }

@@ -17,5 +17,5 @@ public class CarResponseDTO {
 
     private Long bags;
 
-    private Long price;
+    private Double price;
 }
