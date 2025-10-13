@@ -20,7 +20,6 @@ import jakarta.servlet.http.HttpServletResponse;
 @Component
 public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
-
     @Autowired
     private jwtUtils jwtUtils;
 
@@ -42,7 +41,6 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
                 String email = jwtUtils.getSubject(token);
 
                 UserDetails userDetails = userDetailsServiceImpl.loadUserByUsername(email);
-
 
                 UsernamePasswordAuthenticationToken authentication = 
                     new UsernamePasswordAuthenticationToken(userDetails,null,userDetails.getAuthorities());
