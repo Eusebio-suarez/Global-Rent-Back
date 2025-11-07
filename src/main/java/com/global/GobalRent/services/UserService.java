@@ -54,7 +54,7 @@ public class UserService {
 
         UserEntity userRegister = userRepository.save(user);
 
-        if(userRegister == null){
+        if(userRegister.getId()== null){
             throw new ExceptionImpl("no se pudo crear el usuario",HttpStatus.INTERNAL_SERVER_ERROR);
         }
         

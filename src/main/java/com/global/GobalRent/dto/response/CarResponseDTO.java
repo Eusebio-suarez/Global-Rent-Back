@@ -6,6 +6,8 @@ import lombok.Data;
 @Data
 @Builder
 public class CarResponseDTO {
+
+    private String licensePlate;
     
     private String image;
 
