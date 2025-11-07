@@ -8,6 +8,10 @@ import lombok.Data;
 @Data
 @Builder
 public class ReservationResponseDTO {
+
+    private String carModel;
+
+    private String carImg;
     
     private LocalDate startDate;
 

@@ -36,6 +36,34 @@ public class ReservationService {
     @Autowired
     CarRepository carRepository;
 
+    public List<ReservationResponseDTO> getReserves(HttpServletRequest request){
+
+        String email = jwtUtils.getSubjectByRequest(request);
+
+
+        Optional<UserEntity> userOptional = userRepository.findByEmail(email);
+
+        if (userOptional.isEmpty()) {
+            throw new ExceptionImpl("no se encontro e usuario", HttpStatus.NOT_FOUND);
+        }
+
+        UserEntity user = userOptional.get();
+
+
+        return user.getReservations().stream()
+            .map(r -> ReservationResponseDTO
+                .builder()
+                .carModel(r.getCar().getModel())
+                .carImg(r.getCar().getImage())
+                .startDate(r.getStartDate())
+                .endDate(r.getEndDate())
+                .totalPrice(r.getTotalPrice())
+                .build()
+            )
+            .toList();
+
+    }
+
     public ReservationResponseDTO reserve(ReservationRequestDTO reservationRequestDTO, HttpServletRequest request ){
 
         String email = jwtUtils.getSubjectByRequest(request);
