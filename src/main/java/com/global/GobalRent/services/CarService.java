@@ -31,6 +31,7 @@ public class CarService {
         return carsEntity.stream()
             .map(carEntity -> CarResponseDTO.builder()
                 .image(carEntity.getImage())
+                .licensePlate(carEntity.getLicensePlate())
                 .model(carEntity.getModel())
                 .type(carEntity.getType())
                 .people(carEntity.getPeople())
@@ -61,7 +62,7 @@ public class CarService {
 
         CarEntity registeredCar = carRepository.save(carEntity);
         
-        if(registeredCar==null){
+        if(registeredCar.getLicensePlate()==null){
             throw new ExceptionImpl("error al crear el carro",HttpStatus.BAD_REQUEST);
         }
 
