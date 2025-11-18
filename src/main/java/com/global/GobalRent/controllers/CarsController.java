@@ -2,7 +2,6 @@ package com.global.GobalRent.controllers;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -12,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.global.GobalRent.dto.request.CarAvailablesRequestDTO;
 import com.global.GobalRent.dto.request.CarRequestDTO;
 import com.global.GobalRent.dto.response.CarCreatedDTO;
 import com.global.GobalRent.dto.response.CarResponseDTO;
@@ -19,13 +19,14 @@ import com.global.GobalRent.services.CarService;
 import com.global.GobalRent.utils.ApiResponse;
 
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/api/v1/cars")
+@RequiredArgsConstructor
 public class CarsController {
 
-    @Autowired
-    private CarService carService;
+    private final CarService carService;
     
     @GetMapping("")
     public ResponseEntity<ApiResponse<List<CarResponseDTO>>> getCars(){
@@ -36,6 +37,20 @@ public class CarsController {
             .body(ApiResponse.<List<CarResponseDTO>>builder()
                 .success(true)
                 .message("se obtuvieron correctamente los carros")
+                .data(cars)
+                .build()
+            );
+    }
+
+    @GetMapping("/avaliables")
+    public ResponseEntity<ApiResponse<List<CarResponseDTO>>> getAvaliables(@RequestBody CarAvailablesRequestDTO carAvailablesRequestDTO){
+
+        List<CarResponseDTO> cars = carService.getAvailablesCars(carAvailablesRequestDTO);
+
+        return ResponseEntity.status(HttpStatus.OK)
+            .body(ApiResponse.<List<CarResponseDTO>>builder()
+                .success(true)
+                .message("Exito al obtener los carros")
                 .data(cars)
                 .build()
             );

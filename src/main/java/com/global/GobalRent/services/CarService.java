@@ -3,10 +3,10 @@ package com.global.GobalRent.services;
 import java.time.LocalDate;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import com.global.GobalRent.dto.request.CarAvailablesRequestDTO;
 import com.global.GobalRent.dto.request.CarRequestDTO;
 import com.global.GobalRent.dto.response.CarCreatedDTO;
 import com.global.GobalRent.dto.response.CarResponseDTO;
@@ -14,11 +14,31 @@ import com.global.GobalRent.entity.CarEntity;
 import com.global.GobalRent.exceptions.ExceptionImpl;
 import com.global.GobalRent.repository.CarRepository;
 
+import lombok.RequiredArgsConstructor;
+
 @Service
+@RequiredArgsConstructor
 public class CarService {
     
-    @Autowired
-    private CarRepository carRepository;
+    private final CarRepository carRepository;
+
+    public List<CarResponseDTO> getAvailablesCars(CarAvailablesRequestDTO carAvailablesRequestDTO){
+
+        List<CarEntity> cars = carRepository.findCarsAvailableByDates(carAvailablesRequestDTO.getStartDate(),carAvailablesRequestDTO.getEndDate());
+    
+        return cars.stream()
+            .map(c -> CarResponseDTO.builder()
+                .licensePlate(c.getLicensePlate())
+                .image(c.getImage())
+                .model(c.getModel())
+                .type(c.getType())
+                .people(c.getPeople())
+                .bags(c.getBags())
+                .price(c.getPrice())
+                .build()
+            )
+            .toList();
+    }
 
     public List<CarResponseDTO> getActiveCars(){
         
