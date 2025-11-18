@@ -12,4 +12,5 @@ import java.util.List;
 public interface ReservationRepository extends JpaRepository<ReservationEntity, Long> {
     
     public List<ReservationEntity> findByCar_licensePlateAndStartDateLessThanEqualAndEndDateGreaterThanEqual(String licensePlate, LocalDate EndDate, LocalDate StartDate);
+
 }
