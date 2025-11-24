@@ -22,9 +22,9 @@ public class CarService {
     
     private final CarRepository carRepository;
 
-    public List<CarResponseDTO> getAvailablesCars(CarAvailablesRequestDTO carAvailablesRequestDTO){
+    public List<CarResponseDTO> getAvailablesCars(LocalDate startDate, LocalDate endDate){
 
-        List<CarEntity> cars = carRepository.findCarsAvailableByDates(carAvailablesRequestDTO.getStartDate(),carAvailablesRequestDTO.getEndDate());
+        List<CarEntity> cars = carRepository.findCarsAvailableByDates(startDate,endDate);
     
         return cars.stream()
             .map(c -> CarResponseDTO.builder()

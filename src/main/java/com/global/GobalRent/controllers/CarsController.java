@@ -1,15 +1,12 @@
 package com.global.GobalRent.controllers;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.global.GobalRent.dto.request.CarAvailablesRequestDTO;
 import com.global.GobalRent.dto.request.CarRequestDTO;
@@ -43,9 +40,9 @@ public class CarsController {
     }
 
     @GetMapping("/avaliables")
-    public ResponseEntity<ApiResponse<List<CarResponseDTO>>> getAvaliables(@RequestBody CarAvailablesRequestDTO carAvailablesRequestDTO){
+    public ResponseEntity<ApiResponse<List<CarResponseDTO>>> getAvaliables(@RequestParam LocalDate startDate, @RequestParam LocalDate endDate ){
 
-        List<CarResponseDTO> cars = carService.getAvailablesCars(carAvailablesRequestDTO);
+        List<CarResponseDTO> cars = carService.getAvailablesCars(startDate,endDate);
 
         return ResponseEntity.status(HttpStatus.OK)
             .body(ApiResponse.<List<CarResponseDTO>>builder()
