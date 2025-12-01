@@ -4,7 +4,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -22,19 +22,16 @@ import com.global.GobalRent.utils.JwtUtils;
 import jakarta.servlet.http.HttpServletRequest;
 
 @Service
+@RequiredArgsConstructor
 public class ReservationService {
-    
-    @Autowired
-    private ReservationRepository reservationRepository;
 
-    @Autowired
-    private JwtUtils jwtUtils;
+    private final ReservationRepository reservationRepository;
 
-    @Autowired
-    private UserRepository userRepository;
+    private final JwtUtils jwtUtils;
 
-    @Autowired
-    CarRepository carRepository;
+    private final UserRepository userRepository;
+
+    private final CarRepository carRepository;
 
     public List<ReservationResponseDTO> getReserves(HttpServletRequest request){
 
@@ -52,13 +49,17 @@ public class ReservationService {
 
         return user.getReservations().stream()
             .map(r -> ReservationResponseDTO
-                .builder()
-                .carModel(r.getCar().getModel())
-                .carImg(r.getCar().getImage())
-                .startDate(r.getStartDate())
-                .endDate(r.getEndDate())
-                .totalPrice(r.getTotalPrice())
-                .build()
+                    .builder()
+                    .carModel(r.getCar().getModel())
+                    .carImg(r.getCar().getImage())
+                    .startPlace(r.getStartPlace())
+                    .endPlace(r.getEndPlace())
+                    .startDate(r.getStartDate())
+                    .startTime(r.getStartTime())
+                    .endDate(r.getEndDate())
+                    .endTime(r.getEndTime())
+                    .totalPrice(r.getTotalPrice())
+                    .build()
             )
             .toList();
 
@@ -109,19 +110,29 @@ public class ReservationService {
 
         
         ReservationEntity reservation = ReservationEntity.builder()
-            .totalPrice(totalPrice)
-            .user(user)
-            .car(car)
-            .startDate(reservationRequestDTO.getStartDate())
-            .endDate(reservationRequestDTO.getEndDate())
-            .build();
+                .totalPrice(totalPrice)
+                .user(user)
+                .car(car)
+                .startPlace(reservationRequestDTO.getStartPlace())
+                .endPlace(reservationRequestDTO.getEndPlace())
+                .startDate(reservationRequestDTO.getStartDate())
+                .startTime(reservationRequestDTO.getStartTime())
+                .endDate(reservationRequestDTO.getEndDate())
+                .endTime(reservationRequestDTO.getEndTime())
+                .build();
 
         ReservationEntity registeredReservation = reservationRepository.save(reservation);
 
         return ReservationResponseDTO.builder()
-            .startDate(registeredReservation.getStartDate())
-            .endDate(registeredReservation.getEndDate())
-            .totalPrice(registeredReservation.getTotalPrice())
-            .build();
+                .carModel(registeredReservation.getCar().getModel())
+                .carImg(registeredReservation.getCar().getImage())
+                .startPlace(registeredReservation.getStartPlace())
+                .endPlace(registeredReservation.getEndPlace())
+                .startDate(registeredReservation.getStartDate())
+                .startTime(registeredReservation.getStartTime())
+                .endDate(registeredReservation.getEndDate())
+                .endTime(registeredReservation.getEndTime())
+                .totalPrice(registeredReservation.getTotalPrice())
+                .build();
     }
 }
