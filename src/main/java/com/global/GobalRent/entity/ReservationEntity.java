@@ -1,6 +1,7 @@
 package com.global.GobalRent.entity;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -28,18 +29,25 @@ public class ReservationEntity {
 
     private Double totalPrice;
 
+    private String startPlace;
+
+    private String endPlace;
+
+    private LocalDate startDate;
+
+    private LocalTime startTime;
+
+    private LocalDate endDate;
+
+    private LocalTime endTime;
+
     //relacion con la entidad user
     @ManyToOne
     @JoinColumn(name="user_id",nullable = false)
     private UserEntity user;
 
-
     @ManyToOne
     @JoinColumn(name="car_id", nullable = false)
     private CarEntity car;
-
-    private LocalDate startDate;
-
-    private LocalDate endDate;
 
 }

@@ -2,6 +2,7 @@ package com.global.GobalRent.controllers;
 
 import java.util.List;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,10 +22,10 @@ import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/v1/reservations")
+@RequiredArgsConstructor
 public class ReservationController {
     
-    @Autowired
-    ReservationService reservationService;
+    private final ReservationService reservationService;
 
     @GetMapping("")
     public ResponseEntity<ApiResponse<List<ReservationResponseDTO>>>getReservations(HttpServletRequest request){
