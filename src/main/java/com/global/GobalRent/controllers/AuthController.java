@@ -2,13 +2,12 @@ package com.global.GobalRent.controllers;
 
 import java.util.Optional;
 
+import com.global.GobalRent.services.Mailservice;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.global.GobalRent.dto.request.LoginRequestDTO;
 import com.global.GobalRent.dto.request.UserRequestDTO;
@@ -24,13 +23,14 @@ import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/v1/auth")
+@RequiredArgsConstructor
 public class AuthController {
 
-    @Autowired
-    private UserService userService;
+    private final Mailservice mailservice;
 
-    @Autowired
-    private JwtUtils jwtUtils;
+    private final UserService userService;
+
+    private final JwtUtils jwtUtils;
 
     @PostMapping("/login")
     public ResponseEntity<ApiResponse<LoginResponseDTO>>loggin(@Valid @RequestBody LoginRequestDTO loginRequestDTO){
@@ -69,5 +69,10 @@ public class AuthController {
                 .data(user)
                 .build()
             );
+    }
+    @GetMapping("/mail")
+    public String sendMail(){
+        mailservice.senEmail("eusebiosuaresmartines@gmail.com","Prueba","este es un mensage de prueba");
+        return "Exito";
     }
 }
