@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confirmación de reserva - Global Rent</title>
+    <style>
+        body { margin: 0; padding: 0; background-color: #F4F7F6; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        .wrapper { width: 100%; table-layout: fixed; background-color: #F4F7F6; padding-bottom: 40px; }
+        .webkit { max-width: 600px; background-color: #ffffff; margin: 0 auto; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        .btn-primary { background-color: #2ECC71; color: #ffffff; padding: 14px 25px; text-decoration: none; border-radius: 6px; font-weight: bold; display: inline-block; mso-padding-alt: 0; text-align: center; }
+        /* Estilos móviles */
+        @media screen and (max-width: 600px) {
+            .webkit { width: 100% !important; border-radius: 0 !important; }
+            .content-padding { padding: 20px !important; }
+            .col-split { display: block !important; width: 100% !important; padding-bottom: 15px; }
+        }
+    </style>
+</head>
+<body style="margin: 0; padding: 0; background-color: #F4F7F6;">
+
+<center class="wrapper">
+    <div class="webkit">
+        <table align="center" style="width: 100%; max-width: 600px; border-spacing: 0; background-color: #ffffff; margin: 0 auto;">
+
+            <tr>
+                <td style="padding: 25px 40px; border-bottom: 1px solid #f0f0f0;">
+                    <table width="100%">
+                        <tr>
+                            <td align="left">
+                                    <span style="color: #5acf95; font-size: 24px; font-weight: bold; font-family: sans-serif;">
+                                        Global Rent
+                                    </span>
+                            </td>
+                            <td align="right" style="color: #999999; font-size: 14px;">
+                                Reserva Confirmada
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+
+            <tr>
+                <td style="background-color: #E8EAF6; padding: 40px 40px; text-align: center;">
+                    <h1 style="color: #425df6; margin: 0 0 10px 0; font-size: 28px;">¡Todo listo, <span th:text="${nombre}">Usuario</span>!</h1>
+                    <p style="color: #5C6B7F; font-size: 16px; margin: 0;">
+                        Hemos reservado tu <strong th:text="${carModel}" style="color: #5acf95;">BMW</strong> exitosamente.
+                    </p>
+                </td>
+            </tr>
+
+            <tr>
+                <td class="content-padding" style="padding: 30px 40px;">
+
+                    <p style="font-size: 14px; color: #999999; text-transform: uppercase; font-weight: bold; letter-spacing: 1px; margin-bottom: 20px;">
+                        Detalles de la Reserva
+                    </p>
+
+                    <table width="100%" style="margin-bottom: 25px;">
+                        <tr>
+                            <td class="col-split" width="50%" valign="top">
+                                <table width="100%">
+                                    <tr>
+                                        <td width="30" valign="top" style="font-size: 20px;">📅</td>
+                                        <td>
+                                            <span style="font-size: 12px; color: #777;">Recogida</span><br>
+                                            <strong style="color: #333; font-size: 15px;" th:text="${startDate}">01/01/2024</strong><br>
+                                            <span style="font-size: 12px; color: #777;" th:text="${startTime}">12:00 PM</span>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                            <td class="col-split" width="50%" valign="top">
+                                <table width="100%">
+                                    <tr>
+                                        <td width="30" valign="top" style="font-size: 20px;">🏁</td>
+                                        <td>
+                                            <span style="font-size: 12px; color: #777;">Devolución</span><br>
+                                            <strong style="color: #333; font-size: 15px;" th:text="${endDate}">05/01/2024</strong><br>
+                                            <span style="font-size: 12px; color: #777;" th:text="${endTime}" >12:00 PM</span>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+
+                    <hr style="border: 0; border-top: 1px solid #f0f0f0; margin: 20px 0;">
+
+                    <table width="100%" style="margin-bottom: 20px;">
+                        <tr>
+                            <td width="30" valign="top" style="font-size: 20px; padding-top: 2px;">📍</td>
+                            <td>
+                                <span style="font-size: 12px; color: #777;">Lugar de Entrega</span><br>
+                                <a th:href="@{${startPlaceLink}}" th:text="${startPlace}" style="color: #5acf95; text-decoration: none; font-weight: bold; font-size: 15px;">Aeropuerto El Edén</a>
+                            </td>
+                        </tr>
+                        <tr><td height="15"></td></tr> <tr>
+                        <td width="30" valign="top" style="font-size: 20px; padding-top: 2px;">🔄</td>
+                        <td>
+                            <span style="font-size: 12px; color: #777;">Lugar de Devolución</span><br>
+                            <a th:href="@{${endPlaceLink}}" th:text="${endPlace}" style="color: #5acf95; text-decoration: none; font-weight: bold; font-size: 15px;">Aeropuerto El Edén</a>
+                        </td>
+                    </tr>
+                    </table>
+
+                    <table width="100%" style="background-color: #F8F9FA; border-radius: 8px; border: 1px dashed #cccccc;">
+                        <tr>
+                            <td style="padding: 15px; text-align: center;">
+                                <span style="color: #555; font-size: 14px;">Total Estimado</span><br>
+                                <span style="color: #2C3E50; font-size: 24px; font-weight: bold;">
+                                        $<span th:text="${total}">0.00</span>
+                                </span>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+
+            <tr>
+                <td style="background-color: #2C3E50; padding: 30px 20px; text-align: center;">
+                    <p style="color: #ffffff; margin: 0 0 10px 0; font-size: 14px; font-weight: bold;">Global Rent</p>
+                    <p style="color: #aeb6bf; font-size: 12px; margin: 0; line-height: 1.5;">
+                        ¿Necesitas ayuda? Responde a este correo o visita nuestro centro de ayuda.<br>
+                        © 2025 Global Rent Inc.
+                    </p>
+                </td>
+            </tr>
+
+        </table>
+    </div>
+    <div style="height: 40px;"></div> </center>
+</body>
+</html>
