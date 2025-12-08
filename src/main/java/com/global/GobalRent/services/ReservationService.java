@@ -4,6 +4,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
 
+import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -32,6 +33,8 @@ public class ReservationService {
     private final UserRepository userRepository;
 
     private final  CarRepository carRepository;
+
+    private final Mailservice mailservice;
 
     public List<ReservationResponseDTO> getReserves(HttpServletRequest request){
 
@@ -65,7 +68,7 @@ public class ReservationService {
 
     }
 
-    public ReservationResponseDTO reserve(ReservationRequestDTO reservationRequestDTO, HttpServletRequest request ){
+    public ReservationResponseDTO reserve(ReservationRequestDTO reservationRequestDTO, HttpServletRequest request )  {
 
         String email = jwtUtils.getSubjectByRequest(request);
 
@@ -122,6 +125,12 @@ public class ReservationService {
                 .build();
 
         ReservationEntity registeredReservation = reservationRepository.save(reservation);
+
+        try {
+            mailservice.sendEmail(registeredReservation);
+        } catch (MessagingException e) {
+            throw new ExceptionImpl("Error",HttpStatus.INTERNAL_SERVER_ERROR);
+        }
 
         return ReservationResponseDTO.builder()
                 .carModel(registeredReservation.getCar().getModel())
