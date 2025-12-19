@@ -53,18 +53,4 @@ public class CarsController {
             );
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
-    @PostMapping("/register")
-    public ResponseEntity<ApiResponse<CarCreatedDTO>> registerCar(@Valid @RequestBody CarRequestDTO carRequestDTO){
-        
-        CarCreatedDTO car = carService.registerCar(carRequestDTO);
-
-        return ResponseEntity.status(HttpStatus.CREATED)
-            .body(ApiResponse.<CarCreatedDTO>builder()
-                .success(true)
-                .message("exito")
-                .data(car)
-                .build()
-            );
-    }
 }

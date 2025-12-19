@@ -54,7 +54,7 @@ public class ReservationService {
             .map(r -> ReservationResponseDTO
                     .builder()
                     .carModel(r.getCar().getModel())
-                    .carImg(r.getCar().getImage())
+                    .carImg(r.getCar().getImage().getSecuredUrl())
                     .startPlace(r.getStartPlace())
                     .endPlace(r.getEndPlace())
                     .startDate(r.getStartDate())
@@ -134,7 +134,7 @@ public class ReservationService {
 
         return ReservationResponseDTO.builder()
                 .carModel(registeredReservation.getCar().getModel())
-                .carImg(registeredReservation.getCar().getImage())
+                .carImg(registeredReservation.getCar().getImage().getSecuredUrl())
                 .startPlace(registeredReservation.getStartPlace())
                 .endPlace(registeredReservation.getEndPlace())
                 .startDate(registeredReservation.getStartDate())

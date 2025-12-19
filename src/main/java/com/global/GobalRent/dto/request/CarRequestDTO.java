@@ -14,9 +14,6 @@ public class CarRequestDTO {
     private String licensePlate;
 
     @NotBlank
-    private String image;
-
-    @NotBlank
     private String model;
 
     @NotBlank
