@@ -3,11 +3,7 @@ package com.global.GobalRent.entity;
 import java.time.LocalDate;
 import java.util.List;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -24,8 +20,6 @@ public class CarEntity {
     @Id
     private String licensePlate;
 
-    private String image;
-
     private String model;
 
     private String type;
@@ -37,6 +31,10 @@ public class CarEntity {
     private Double price;
 
     private boolean status;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "image_id")
+    private ImgEntity image;
 
     @OneToMany(mappedBy = "car")
     private List<ReservationEntity> reservations;
