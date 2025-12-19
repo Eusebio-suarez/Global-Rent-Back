@@ -1,39 +1,55 @@
 package com.global.GobalRent.controllers;
 
-import com.cloudinary.Cloudinary;
 import com.global.GobalRent.dto.request.CarRequestDTO;
+import com.global.GobalRent.dto.response.CarCreatedDTO;
+import com.global.GobalRent.dto.response.CarResponseAdminDTO;
+import com.global.GobalRent.services.CarService;
+import com.global.GobalRent.utils.ApiResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
-import java.util.Map;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/admin")
 @RequiredArgsConstructor
 public class AdminController {
 
-    private final Cloudinary cloudinary;
+    private final CarService carService;
 
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/cars")
+    public ResponseEntity<ApiResponse<List<CarResponseAdminDTO>>> getAllCars()  {
+
+        List<CarResponseAdminDTO> cars =  carService.getAllCars();
+
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(ApiResponse.<List<CarResponseAdminDTO>>builder()
+                        .message("Exito")
+                        .success(true)
+                        .data(cars)
+                        .build()
+                );
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping(path = "/cars",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public Map<String, Object> uploadFIle(@RequestPart("image")MultipartFile image, @RequestPart("data")CarRequestDTO car) throws IOException {
+    public ResponseEntity<ApiResponse<CarCreatedDTO>> registerCar(@RequestPart("image")MultipartFile image, @RequestPart("data")CarRequestDTO car)  {
 
-        Map<String,Object> uploadResult = cloudinary.uploader().upload(
-                image.getBytes(),
-                Map.of("folder","cars")
-        );
+        CarCreatedDTO carCreated =  carService.registerCar(car,image);
 
-        String imageUrl = (String) uploadResult.get("secure_url");
-
-        String public_id = (String) uploadResult.get("public_id");
-
-        return  uploadResult;
-
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(ApiResponse.<CarCreatedDTO>builder()
+                        .message("Se creo correcatmente")
+                        .success(true)
+                        .data(carCreated)
+                        .build()
+                );
     }
 
 }

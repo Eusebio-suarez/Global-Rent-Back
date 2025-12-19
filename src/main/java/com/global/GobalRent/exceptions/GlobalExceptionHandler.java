@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import com.global.GobalRent.utils.ApiResponse;
 
+import java.io.IOException;
+
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
@@ -22,6 +24,30 @@ public class GlobalExceptionHandler {
                 .data("error:" +exception.getStatus())
                 .build()
             );
+    }
+
+    @ExceptionHandler(ImgUploadException.class)
+    public ResponseEntity<ApiResponse<?>> handleUserException(ImgUploadException  exception){
+
+        return ResponseEntity.status(500)
+                .body(ApiResponse.builder()
+                        .success(false)
+                        .message(exception.getMessage())
+                        .data("error:" +500)
+                        .build()
+                );
+    }
+
+    @ExceptionHandler(NullPointerException.class)
+    public ResponseEntity<ApiResponse<?>> handleUserException(NullPointerException  exception){
+
+        return ResponseEntity.status(500)
+                .body(ApiResponse.builder()
+                        .success(false)
+                        .message(exception.getMessage())
+                        .data("error:" +500)
+                        .build()
+                );
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
