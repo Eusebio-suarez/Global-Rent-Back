@@ -4,6 +4,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
 
+import com.global.GobalRent.mappers.ReservationsMapper;
 import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -36,35 +37,16 @@ public class ReservationService {
 
     private final Mailservice mailservice;
 
+    private final ReservationsMapper reservationsMapper;
+
     public List<ReservationResponseDTO> getReserves(HttpServletRequest request){
 
         String email = jwtUtils.getSubjectByRequest(request);
 
+        UserEntity user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new ExceptionImpl("no se encontro e usuario", HttpStatus.NOT_FOUND));
 
-        Optional<UserEntity> userOptional = userRepository.findByEmail(email);
-
-        if (userOptional.isEmpty()) {
-            throw new ExceptionImpl("no se encontro e usuario", HttpStatus.NOT_FOUND);
-        }
-
-        UserEntity user = userOptional.get();
-
-
-        return user.getReservations().stream()
-            .map(r -> ReservationResponseDTO
-                    .builder()
-                    .carModel(r.getCar().getModel())
-                    .carImg(r.getCar().getImage().getSecuredUrl())
-                    .startPlace(r.getStartPlace())
-                    .endPlace(r.getEndPlace())
-                    .startDate(r.getStartDate())
-                    .startTime(r.getStartTime())
-                    .endDate(r.getEndDate())
-                    .endTime(r.getEndTime())
-                    .totalPrice(r.getTotalPrice())
-                    .build()
-            )
-            .toList();
+        return reservationsMapper.toDTOList(user.getReservations());
 
     }
 

@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.global.GobalRent.dto.response.CarResponseAdminDTO;
 import com.global.GobalRent.entity.ImgEntity;
+import com.global.GobalRent.mappers.CarsMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -27,44 +28,24 @@ public class CarService {
 
     private final CloudinaryService cloudinary;
 
+    private final CarsMapper carsMapper;
+
     public List<CarResponseAdminDTO> getAllCars(){
 
         List<CarEntity> cars = carRepository.findAll();
 
-
-        return cars.stream()
-                .map(c -> CarResponseAdminDTO.builder()
-                        .licensePlate(c.getLicensePlate())
-                        .image(c.getImage().getSecuredUrl())
-                        .model(c.getModel())
-                        .type(c.getType())
-                        .people(c.getPeople())
-                        .bags(c.getBags())
-                        .price(c.getPrice())
-                        .status(c.isStatus())
-                        .build()
-                )
-                .toList();
+        return carsMapper.toAdminResponseDTOList(cars);
     }
 
+    @Transactional(readOnly = true)
     public List<CarResponseDTO> getAvailablesCars(LocalDate startDate, LocalDate endDate){
 
         List<CarEntity> cars = carRepository.findCarsAvailableByDates(startDate,endDate);
-    
-        return cars.stream()
-            .map(c -> CarResponseDTO.builder()
-                .licensePlate(c.getLicensePlate())
-                .image(c.getImage().getSecuredUrl())
-                .model(c.getModel())
-                .type(c.getType())
-                .people(c.getPeople())
-                .bags(c.getBags())
-                .price(c.getPrice())
-                .build()
-            )
-            .toList();
+
+        return carsMapper.toResponseDTOList(cars);
     }
 
+    @Transactional(readOnly = true)
     public List<CarResponseDTO> getActiveCars(){
         
         List<CarEntity> carsEntity = carRepository.findByStatusTrue();
@@ -73,18 +54,7 @@ public class CarService {
             throw new ExceptionImpl("No se encontraron carros.",HttpStatus.NOT_FOUND);
         }
 
-        return carsEntity.stream()
-            .map(carEntity -> CarResponseDTO.builder()
-                .image(carEntity.getImage().getSecuredUrl())
-                .licensePlate(carEntity.getLicensePlate())
-                .model(carEntity.getModel())
-                .type(carEntity.getType())
-                .people(carEntity.getPeople())
-                .bags(carEntity.getBags())
-                .price(carEntity.getPrice())
-                .build()
-            )
-            .toList();
+        return carsMapper.toResponseDTOList(carsEntity);
     }
 
     @Transactional
@@ -109,10 +79,6 @@ public class CarService {
             .build();
 
         CarEntity registeredCar = carRepository.save(carEntity);
-        
-        if(registeredCar.getLicensePlate()==null){
-            throw new ExceptionImpl("error al crear el carro",HttpStatus.BAD_REQUEST);
-        }
 
         return CarCreatedDTO.builder()
             .licensePlate(registeredCar.getLicensePlate())
