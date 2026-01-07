@@ -55,10 +55,10 @@ public class AdminController {
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    @PatchMapping("/cars/{licensePlate}")
-    public ResponseEntity<ApiResponse<CarResponseAdminDTO>> updateCar(@RequestBody CarPatchRequestDTO carRequest,@PathVariable String licensePlate){
+    @PatchMapping(path = "/cars/{licensePlate}",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<ApiResponse<CarResponseAdminDTO>> updateCar(@PathVariable String licensePlate,@RequestPart("data") CarPatchRequestDTO carRequest,@RequestPart(name = "image",required = false) MultipartFile image ){
 
-        CarResponseAdminDTO car = carService.updateCar(carRequest,licensePlate);
+        CarResponseAdminDTO car = carService.updateCar(licensePlate,carRequest,image);
 
         return ResponseEntity.status(HttpStatus.ACCEPTED)
                 .body(ApiResponse.<CarResponseAdminDTO>builder()

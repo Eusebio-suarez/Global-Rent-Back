@@ -2,11 +2,13 @@ package com.global.GobalRent.services;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 import com.global.GobalRent.dto.request.CarPatchRequestDTO;
 import com.global.GobalRent.dto.response.CarResponseAdminDTO;
 import com.global.GobalRent.entity.ImgEntity;
 import com.global.GobalRent.mappers.CarsMapper;
+import com.global.GobalRent.repository.ImgRepository;
 import com.global.GobalRent.utils.PatchHelper;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -27,6 +29,8 @@ import org.springframework.web.multipart.MultipartFile;
 public class CarService {
     
     private final CarRepository carRepository;
+
+    private final ImgRepository imgRepository;
 
     private final CloudinaryService cloudinary;
 
@@ -91,7 +95,7 @@ public class CarService {
     }
 
     @Transactional
-    public CarResponseAdminDTO updateCar(CarPatchRequestDTO carRequest, String licensePlate){
+    public CarResponseAdminDTO updateCar(String licensePlate, CarPatchRequestDTO carRequest, MultipartFile image ){
 
             CarEntity car = carRepository.findById(licensePlate)
                     .orElseThrow(()->new ExceptionImpl("car not found",HttpStatus.NOT_FOUND));
@@ -105,6 +109,22 @@ public class CarService {
                 car.setLicensePlate(carRequest.getLicensePlate().get());
             }
 
+            if( image != null && !image.isEmpty()){
+
+                ImgEntity oldImg = car.getImage();
+
+                ImgEntity newImg  = cloudinary.uploadImg(image);
+
+                car.setImage(newImg);
+
+                if (oldImg!=null){
+
+                    imgRepository.deleteById(oldImg.getId());
+
+                    cloudinary.deleteImg(oldImg.getPublicId());
+                }
+            }
+
             PatchHelper.updateIfPresent(carRequest.getModel(),car::setModel);
             PatchHelper.updateIfPresent(carRequest.getType(),car::setType);
             PatchHelper.updateIfPresent(carRequest.getPeople(),car::setPeople);
@@ -112,8 +132,6 @@ public class CarService {
             PatchHelper.updateIfPresent(carRequest.getPrice(),car::setPrice);
             PatchHelper.updateIfPresent(carRequest.getStatus(),car::setStatus);
 
-            carRepository.save(car);
-
-            return carsMapper.toAdminResponseDTO(car);
+            return carsMapper.toAdminResponseDTO(carRepository.save(car));
     }
 }
