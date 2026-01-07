@@ -3,9 +3,11 @@ package com.global.GobalRent.services;
 import java.time.LocalDate;
 import java.util.List;
 
+import com.global.GobalRent.dto.request.CarPatchRequestDTO;
 import com.global.GobalRent.dto.response.CarResponseAdminDTO;
 import com.global.GobalRent.entity.ImgEntity;
 import com.global.GobalRent.mappers.CarsMapper;
+import com.global.GobalRent.utils.PatchHelper;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -30,6 +32,7 @@ public class CarService {
 
     private final CarsMapper carsMapper;
 
+    @Transactional(readOnly = true)
     public List<CarResponseAdminDTO> getAllCars(){
 
         List<CarEntity> cars = carRepository.findAll();
@@ -85,5 +88,32 @@ public class CarService {
             .createAt(registeredCar.getCreateAt())
             .updateAt(registeredCar.getUpdateAt())
             .build();
+    }
+
+    @Transactional
+    public CarResponseAdminDTO updateCar(CarPatchRequestDTO carRequest, String licensePlate){
+
+            CarEntity car = carRepository.findById(licensePlate)
+                    .orElseThrow(()->new ExceptionImpl("car not found",HttpStatus.NOT_FOUND));
+
+            if(carRequest.getLicensePlate().isPresent()){
+
+                if(carRepository.existsById(carRequest.getLicensePlate().get())){
+                    throw new ExceptionImpl("id already exists",HttpStatus.CONFLICT);
+                }
+
+                car.setLicensePlate(carRequest.getLicensePlate().get());
+            }
+
+            PatchHelper.updateIfPresent(carRequest.getModel(),car::setModel);
+            PatchHelper.updateIfPresent(carRequest.getType(),car::setType);
+            PatchHelper.updateIfPresent(carRequest.getPeople(),car::setPeople);
+            PatchHelper.updateIfPresent(carRequest.getBags(),car::setBags);
+            PatchHelper.updateIfPresent(carRequest.getPrice(),car::setPrice);
+            PatchHelper.updateIfPresent(carRequest.getStatus(),car::setStatus);
+
+            carRepository.save(car);
+
+            return carsMapper.toAdminResponseDTO(car);
     }
 }
