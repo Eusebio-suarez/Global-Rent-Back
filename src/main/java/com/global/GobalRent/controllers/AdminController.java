@@ -1,8 +1,10 @@
 package com.global.GobalRent.controllers;
 
+import com.global.GobalRent.dto.request.CarPatchRequestDTO;
 import com.global.GobalRent.dto.request.CarRequestDTO;
 import com.global.GobalRent.dto.response.CarCreatedDTO;
 import com.global.GobalRent.dto.response.CarResponseAdminDTO;
+import com.global.GobalRent.dto.response.CarResponseDTO;
 import com.global.GobalRent.services.CarService;
 import com.global.GobalRent.utils.ApiResponse;
 import lombok.RequiredArgsConstructor;
@@ -28,7 +30,7 @@ public class AdminController {
 
         List<CarResponseAdminDTO> cars =  carService.getAllCars();
 
-        return ResponseEntity.status(HttpStatus.CREATED)
+        return ResponseEntity.status(HttpStatus.ACCEPTED)
                 .body(ApiResponse.<List<CarResponseAdminDTO>>builder()
                         .message("Exito")
                         .success(true)
@@ -48,6 +50,21 @@ public class AdminController {
                         .message("Se creo correcatmente")
                         .success(true)
                         .data(carCreated)
+                        .build()
+                );
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @PatchMapping("/cars/{licensePlate}")
+    public ResponseEntity<ApiResponse<CarResponseAdminDTO>> updateCar(@RequestBody CarPatchRequestDTO carRequest,@PathVariable String licensePlate){
+
+        CarResponseAdminDTO car = carService.updateCar(carRequest,licensePlate);
+
+        return ResponseEntity.status(HttpStatus.ACCEPTED)
+                .body(ApiResponse.<CarResponseAdminDTO>builder()
+                        .message("updated correctly")
+                        .success(true)
+                        .data(car)
                         .build()
                 );
     }
