@@ -2,7 +2,6 @@ package com.global.GobalRent.services;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Map;
 
 import com.global.GobalRent.dto.request.CarPatchRequestDTO;
 import com.global.GobalRent.dto.response.CarResponseAdminDTO;
@@ -133,5 +132,17 @@ public class CarService {
             PatchHelper.updateIfPresent(carRequest.getStatus(),car::setStatus);
 
             return carsMapper.toAdminResponseDTO(carRepository.save(car));
+    }
+
+    public void deleteCar(String licensePlate){
+
+        CarEntity car = carRepository.findById(licensePlate)
+                .orElseThrow(()-> new ExceptionImpl("car not found", HttpStatus.NOT_FOUND));
+
+        cloudinary.deleteImg(car.getImage().getPublicId());
+
+        imgRepository.deleteById(car.getImage().getId());
+
+        carRepository.delete(car);
     }
 }
