@@ -69,4 +69,19 @@ public class AdminController {
                 );
     }
 
+    @DeleteMapping("/cars/{licensePlate}")
+    public ResponseEntity<ApiResponse<String>>deleteCar(@PathVariable String licensePlate){
+
+        carService.deleteCar(licensePlate);
+
+        return ResponseEntity.status(HttpStatus.ACCEPTED)
+                .body(ApiResponse.<String>builder()
+                        .message("deleted correctly")
+                        .success(true)
+                        .data(null)
+                        .build()
+                );
+    }
+
+
 }
