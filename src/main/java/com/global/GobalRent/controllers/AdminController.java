@@ -5,7 +5,9 @@ import com.global.GobalRent.dto.request.CarRequestDTO;
 import com.global.GobalRent.dto.response.CarCreatedDTO;
 import com.global.GobalRent.dto.response.CarResponseAdminDTO;
 import com.global.GobalRent.dto.response.CarResponseDTO;
+import com.global.GobalRent.dto.response.ReservationAdminResponseDTO;
 import com.global.GobalRent.services.CarService;
+import com.global.GobalRent.services.ReservationService;
 import com.global.GobalRent.utils.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -23,6 +25,8 @@ import java.util.List;
 public class AdminController {
 
     private final CarService carService;
+
+    private final ReservationService reservationService;
 
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/cars")
@@ -47,7 +51,7 @@ public class AdminController {
 
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(ApiResponse.<CarCreatedDTO>builder()
-                        .message("Se creo correcatmente")
+                        .message("Se creo correctmente")
                         .success(true)
                         .data(carCreated)
                         .build()
@@ -69,6 +73,7 @@ public class AdminController {
                 );
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/cars/{licensePlate}")
     public ResponseEntity<ApiResponse<String>>deleteCar(@PathVariable String licensePlate){
 
@@ -83,5 +88,17 @@ public class AdminController {
                 );
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/reservations")
+    public ResponseEntity<ApiResponse<List<ReservationAdminResponseDTO>>>getAllReserves(){
+        List<ReservationAdminResponseDTO> reserves = reservationService.getAllReserves();
 
+        return ResponseEntity.status(HttpStatus.ACCEPTED)
+                .body(ApiResponse.<List<ReservationAdminResponseDTO>>builder()
+                        .message("successfull")
+                        .success(true)
+                        .data(reserves)
+                        .build()
+                );
+    }
 }
