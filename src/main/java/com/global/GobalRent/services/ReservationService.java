@@ -4,6 +4,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
 
+import com.global.GobalRent.dto.response.ReservationAdminResponseDTO;
 import com.global.GobalRent.mappers.ReservationsMapper;
 import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
@@ -114,16 +115,11 @@ public class ReservationService {
             throw new ExceptionImpl("Error",HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
-        return ReservationResponseDTO.builder()
-                .carModel(registeredReservation.getCar().getModel())
-                .carImg(registeredReservation.getCar().getImage().getSecuredUrl())
-                .startPlace(registeredReservation.getStartPlace())
-                .endPlace(registeredReservation.getEndPlace())
-                .startDate(registeredReservation.getStartDate())
-                .startTime(registeredReservation.getStartTime())
-                .endDate(registeredReservation.getEndDate())
-                .endTime(registeredReservation.getEndTime())
-                .totalPrice(registeredReservation.getTotalPrice())
-                .build();
+        return reservationsMapper.toDTO(registeredReservation);
+    }
+
+    public List<ReservationAdminResponseDTO> getAllReserves(){
+
+        return reservationsMapper.toAdminDTOList(reservationRepository.findAll());
     }
 }
