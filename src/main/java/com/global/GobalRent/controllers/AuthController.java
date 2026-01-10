@@ -35,16 +35,11 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<ApiResponse<LoginResponseDTO>>loggin(@Valid @RequestBody LoginRequestDTO loginRequestDTO){
-        
-        Optional<UserEntity>userOptional= userService.tryLoggin(loginRequestDTO);
 
-        if(userOptional.isEmpty()){
-            throw  new ExceptionImpl("correo o contreseña incorecta.", HttpStatus.BAD_REQUEST);
-        }
+        UserEntity user = userService.tryLoggin(loginRequestDTO)
+                .orElseThrow(() -> new ExceptionImpl("User not found",HttpStatus.NOT_FOUND));
 
-        UserEntity user = userOptional.get();
-
-        String token = jwtUtils.generateToken(user.getEmail());
+        String token = jwtUtils.generateToken(user.getEmail(),user.getRol());
 
         return ResponseEntity.status(HttpStatus.ACCEPTED)
             .body(ApiResponse.<LoginResponseDTO>builder()
