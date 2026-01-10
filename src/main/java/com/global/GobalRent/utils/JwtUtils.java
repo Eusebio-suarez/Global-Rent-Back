@@ -3,7 +3,9 @@ package com.global.GobalRent.utils;
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.Date;
+import java.util.Map;
 
+import com.global.GobalRent.enums.RolEnum;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -29,15 +31,16 @@ public class JwtUtils {
     }
 
     //generar token
-    public String generateToken(String email){
+    public String generateToken(String email, RolEnum role){
 
         return Jwts.builder()
-            .setSubject(email)
-            .setIssuedAt(new Date())
-            .setExpiration(new Date(System.currentTimeMillis()
-                +Long.parseLong(expiration)))
-            .signWith(getSignatureKey(),SignatureAlgorithm.HS256)
-            .compact();
+                .setSubject(email)
+                .claim("role","ROLE_"+role)
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(System.currentTimeMillis()
+                    +Long.parseLong(expiration)))
+                .signWith(getSignatureKey(),SignatureAlgorithm.HS256)
+                .compact();
     }
 
     //verificar el token
@@ -45,17 +48,17 @@ public class JwtUtils {
 
         try{
 
-            Jwts.parserBuilder()
-                .setSigningKey(getSignatureKey())
-                .build()
-                .parseClaimsJws(token);
+                Jwts.parserBuilder()
+                    .setSigningKey(getSignatureKey())
+                    .build()
+                    .parseClaimsJws(token);
 
-            return true;
-        
+                return true;
+
         }
         catch(JwtException | IllegalArgumentException e){
 
-            return false;
+                return false;
         }
 
     }
@@ -64,11 +67,11 @@ public class JwtUtils {
     public String getSubject(String token){
 
         return Jwts.parserBuilder()
-            .setSigningKey(getSignatureKey())
-            .build()
-            .parseClaimsJws(token)
-            .getBody()
-            .getSubject();
+                .setSigningKey(getSignatureKey())
+                .build()
+                .parseClaimsJws(token)
+                .getBody()
+                .getSubject();
     }
 
     //obtener el subject con la request

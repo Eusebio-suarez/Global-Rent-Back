@@ -2,6 +2,7 @@ package com.global.GobalRent.services;
 
 import java.util.Optional;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -13,10 +14,10 @@ import com.global.GobalRent.repository.UserRepository;
 import com.global.GobalRent.security.securityUser;
 
 @Service
+@RequiredArgsConstructor
 public class UserDetailsServiceImpl  implements  UserDetailsService{
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
