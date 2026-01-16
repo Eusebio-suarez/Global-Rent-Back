@@ -122,4 +122,12 @@ public class ReservationService {
 
         return reservationsMapper.toAdminDTOList(reservationRepository.findAll());
     }
+
+    public ReservationAdminResponseDTO getReserveById(Long id){
+
+        ReservationEntity reserve = reservationRepository.findById(id)
+                .orElseThrow(() -> new ExceptionImpl("Not found",HttpStatus.NOT_FOUND));
+
+        return reservationsMapper.toAdminDTO(reserve);
+    }
 }
