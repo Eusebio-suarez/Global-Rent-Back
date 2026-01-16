@@ -14,6 +14,8 @@ import java.time.LocalTime;
 @NoArgsConstructor
 public class ReservationAdminResponseDTO {
 
+    private Long id;
+
     private String clientName;
 
     private String clientEmail;
