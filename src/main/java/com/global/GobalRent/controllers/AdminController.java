@@ -101,4 +101,18 @@ public class AdminController {
                         .build()
                 );
     }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/reservations/{id}")
+    public ResponseEntity<ApiResponse<ReservationAdminResponseDTO>>getReserveById(@PathVariable Long id){
+        ReservationAdminResponseDTO reserve = reservationService.getReserveById(id);
+
+        return ResponseEntity.status(HttpStatus.ACCEPTED)
+                .body(ApiResponse.<ReservationAdminResponseDTO>builder()
+                        .message("successfull")
+                        .success(true)
+                        .data(reserve)
+                        .build()
+                );
+    }
 }
