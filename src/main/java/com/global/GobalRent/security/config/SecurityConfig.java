@@ -52,7 +52,7 @@ public class SecurityConfig {
 
         CorsConfiguration corsConfiguration = new CorsConfiguration();
 
-        corsConfiguration.addAllowedOrigin("http://localhost:4200");
+        corsConfiguration.addAllowedOrigin("https://gobal-rent.vercel.app");
 
         corsConfiguration.addAllowedMethod("*");
 
