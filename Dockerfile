@@ -12,6 +12,8 @@ RUN mvn package -DskipTests
 
 FROM eclipse-temurin:17-jre-alpine
 
+RUN apk add --no-cache ca-certificates
+
 WORKDIR /app
 
 COPY --from=build /app/target/*.jar app.jar
