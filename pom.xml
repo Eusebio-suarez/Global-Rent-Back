@@ -79,10 +79,10 @@
 			<version>0.11.0</version>
 		</dependency>
 
-        <!-- mail dependencies -->
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-mail</artifactId>
+            <groupId>com.mailjet</groupId>
+            <artifactId>mailjet-client</artifactId>
+            <version>5.2.6</version>
         </dependency>
 
         <!--retryable -->

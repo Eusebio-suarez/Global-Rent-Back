@@ -6,7 +6,6 @@ import java.util.Optional;
 
 import com.global.GobalRent.dto.response.ReservationAdminResponseDTO;
 import com.global.GobalRent.mappers.ReservationsMapper;
-import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -109,11 +108,7 @@ public class ReservationService {
 
         ReservationEntity registeredReservation = reservationRepository.save(reservation);
 
-        try {
-            mailservice.sendEmail(registeredReservation);
-        } catch (MessagingException e) {
-            throw new ExceptionImpl("Error",HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        mailservice.sendEmail(registeredReservation);
 
         return reservationsMapper.toDTO(registeredReservation);
     }
